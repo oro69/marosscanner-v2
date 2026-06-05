@@ -1,0 +1,902 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>MarosAirbnb</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#081225;
+      --bg-2:#0b1730;
+      --panel:#102341;
+      --panel-soft:rgba(13,29,55,.86);
+      --card:rgba(255,255,255,.055);
+      --card-2:rgba(255,255,255,.03);
+      --line:rgba(255,255,255,.08);
+      --line-strong:rgba(255,255,255,.18);
+      --text:#f4f7ff;
+      --muted:#a9b6d3;
+      --blue:#295fd1;
+      --blue-soft:rgba(47,111,237,.18);
+      --coral:#eb4f68;
+      --coral-soft:rgba(232,93,117,.18);
+      --mint:#78f1de;
+      --mint-soft:rgba(120,241,222,.18);
+      --success:#75e2b2;
+      --shadow:0 28px 80px rgba(2,8,20,.42);
+      --radius-xl:30px;
+      --radius-lg:22px;
+      --radius-md:16px;
+      --radius-sm:12px;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;min-height:100%;background:radial-gradient(circle at top,#17335f 0%,#0d2344 20%,#091527 52%,#040913 100%);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+    body{min-height:100vh}
+    button,input{font:inherit}
+    img,svg{display:block;max-width:100%}
+    .boot{min-height:100vh;display:grid;place-items:center;padding:28px;background:radial-gradient(circle at 50% 16%,rgba(235,79,104,.18),rgba(235,79,104,0) 24%),radial-gradient(circle at 12% 18%,rgba(41,95,209,.34),rgba(41,95,209,0) 28%),radial-gradient(circle at 86% 14%,rgba(41,95,209,.24),rgba(41,95,209,0) 26%)}
+    .glass{background:linear-gradient(180deg,rgba(13,30,54,.96),rgba(8,19,36,.92));backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.07);box-shadow:var(--shadow)}
+    .login{width:min(100%,560px);padding:26px 28px 30px;border-radius:38px;text-align:center;position:relative;overflow:hidden;background:linear-gradient(180deg,rgba(7,18,35,.98),rgba(4,11,24,.97))}
+    .login:before{content:'';position:absolute;inset:0 0 auto 0;height:180px;background:linear-gradient(180deg,rgba(41,95,209,.16),rgba(41,95,209,0));pointer-events:none}
+    .logo-wrap{display:grid;justify-items:center;gap:10px}
+    .logo-stage{width:100%;min-height:192px;border-radius:28px;padding:22px 18px 16px;display:grid;justify-items:center;align-content:center;background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.018));border:1px solid rgba(255,255,255,.10);box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 22px 44px rgba(0,0,0,.34)}
+    .logo-mark{width:138px;height:138px;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 35%,rgba(255,255,255,.08),rgba(255,255,255,0) 68%);border:0;box-shadow:none;padding:0;margin:0 auto 10px;border-radius:32px;overflow:hidden}
+    .logo-mark{overflow:hidden}.logo-mark img{width:100%;height:100%;object-fit:cover;display:block}.logo-mark svg{width:86px;height:86px}
+    .logo-kicker{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:#b6c6e3;font-weight:700}
+    .logo-title{font-family:'Plus Jakarta Sans',Inter,sans-serif;font-size:46px;font-weight:800;letter-spacing:-1.1px}
+    .logo-subtitle{font-size:14px;line-height:1.55;color:#e0e8f8;max-width:28ch}
+    .field{margin-top:18px}
+    .field input{width:100%;min-height:58px;border-radius:20px;border:1px solid rgba(255,255,255,.075);background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.03));color:var(--text);padding:0 18px;text-align:center;outline:none;box-shadow:inset 0 1px 0 rgba(255,255,255,.03)}
+    .field input:focus{border-color:rgba(120,241,222,.35);box-shadow:0 0 0 4px rgba(120,241,222,.12)}
+    .btn{border:0;cursor:pointer;transition:.18s ease;display:inline-flex;align-items:center;justify-content:center}
+    .btn:hover{transform:translateY(-1px)}
+    .btn-primary{width:100%;min-height:58px;border-radius:20px;margin-top:14px;background:linear-gradient(135deg,#1e4aa4 0%,#315ec0 42%,#e44d64 100%);color:white;font-weight:800;box-shadow:0 18px 38px rgba(17,37,77,.38)}
+    .login-phrase{margin-top:18px;font-size:13px;line-height:1.6;color:#dce6fb}
+    .error{display:none;margin-top:12px;padding:12px 14px;border-radius:14px;background:rgba(232,93,117,.12);border:1px solid rgba(232,93,117,.24);color:#ffd8e0;font-size:13px}
+    .login-shell{margin-top:18px;display:grid;gap:12px}
+    .login-meta{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
+    .meta-chip{min-height:30px;padding:0 12px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#eef4ff}
+
+    .app{display:none;padding:12px 12px 96px}
+    .app.ready{display:block}
+    .mobile{display:block;max-width:760px;margin:0 auto}
+    .desktop{display:none;max-width:1320px;margin:0 auto}
+    .top{padding:18px 18px 16px;border-radius:34px;background:linear-gradient(180deg,rgba(9,24,46,.99),rgba(6,15,30,.97));position:relative;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,.05)}
+    .top:before{content:'';position:absolute;inset:0 0 auto 0;height:92px;background:linear-gradient(90deg,rgba(41,95,209,.18),rgba(235,79,104,.08),rgba(41,95,209,0));pointer-events:none}
+    .top-head{display:flex;justify-content:space-between;align-items:center;gap:14px;position:relative;z-index:1}
+    .brand-head{display:grid;grid-template-columns:48px 1fr;gap:12px;align-items:center}
+    .mini-logo{width:48px;height:48px;border-radius:16px;overflow:hidden;display:grid !important;place-items:center;align-self:center;justify-self:start;background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.10);box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 10px 20px rgba(0,0,0,.22);padding:0;min-width:48px;min-height:48px}
+    .mini-logo img{width:100%;height:100%;object-fit:cover;display:block}
+    .mini-logo svg{width:26px;height:26px}
+    .mini-logo-svg svg{width:100%;height:100%;display:block;transform:scale(1.34);filter:drop-shadow(0 8px 18px rgba(0,0,0,.18))}
+    .logo-mark svg{width:248px;height:248px;display:block;overflow:visible;transform:translateY(-6px)}
+    .mini-logo svg{overflow:visible}
+    h1,h2,h3,h4,p{margin:0}
+    .brand-name{font-family:'Plus Jakarta Sans',Inter,sans-serif;font-size:24px;font-weight:800;line-height:1.02;letter-spacing:-.4px}
+    .sub{margin-top:6px;font-size:13px;color:var(--muted)}
+    .ghost{min-height:46px;padding:0 18px;border-radius:16px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07);color:var(--text);font-weight:700}
+    .building-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;position:relative;z-index:1}
+    .building{min-height:44px;padding:0 18px;border-radius:999px;background:linear-gradient(135deg,rgba(41,95,209,.22),rgba(235,79,104,.16));border:1px solid rgba(255,255,255,.09);color:var(--text);font-weight:700;box-shadow:inset 0 1px 0 rgba(255,255,255,.035)}
+    .building.off{opacity:.42}
+    .panel{margin-top:16px;padding:16px;border-radius:30px}
+    .list{display:grid;gap:12px}
+    .item{padding:18px;border-radius:24px;background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.024));border:1px solid rgba(255,255,255,.07);box-shadow:inset 0 1px 0 rgba(255,255,255,.03)}
+    .row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+    .meta{margin-top:10px;color:var(--muted);font-size:13px;line-height:1.5}
+    .pill-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+    .pill{display:inline-flex;align-items:center;min-height:32px;padding:0 12px;border-radius:999px;border:1px solid transparent;font-size:12px;font-weight:800}
+    .booking{background:rgba(47,111,237,.18);border-color:rgba(47,111,237,.30)}
+    .airbnb{background:rgba(232,93,117,.16);border-color:rgba(232,93,117,.28)}
+    .vrbo{background:rgba(147,118,255,.16);border-color:rgba(147,118,255,.28)}
+    .directo{background:rgba(120,241,222,.14);border-color:rgba(120,241,222,.26)}
+    .green{background:rgba(117,226,178,.14);border-color:rgba(117,226,178,.24)}
+    .amber{background:rgba(255,201,106,.14);border-color:rgba(255,201,106,.24)}
+    .rose{background:rgba(232,93,117,.14);border-color:rgba(232,93,117,.24)}
+    .blue{background:rgba(47,111,237,.16);border-color:rgba(47,111,237,.24)}
+
+    .assistant-wrap{margin-top:14px;display:grid;gap:10px}
+    .assistant-fab{width:100%;padding:14px 16px;border-radius:18px;display:flex;align-items:center;justify-content:flex-start;gap:10px;background:linear-gradient(135deg,rgba(31,79,168,.30),rgba(225,75,98,.20));border:1px solid rgba(255,255,255,.10);color:var(--text);text-align:left}
+    .assistant-icon{width:36px;height:36px;border-radius:14px;background:rgba(255,255,255,.10);display:grid;place-items:center;color:#fff;font-weight:900}
+    .assistant-panel{padding:14px;border-radius:20px;background:var(--card-2);border:1px solid var(--line);display:grid;gap:10px}
+    .assistant-list{display:grid;gap:10px}
+    .assistant-suggestion{padding:12px;border-radius:16px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);display:grid;gap:10px}
+    .assistant-top{display:flex;gap:10px;align-items:flex-start}
+    .assistant-index{min-width:24px;height:24px;border-radius:999px;background:rgba(120,241,222,.18);display:grid;place-items:center;color:#cffff5;font-size:12px;font-weight:800}
+    .assistant-text{flex:1;color:#edf4ff;font-size:14px;line-height:1.5;text-align:left}
+    .copy-row{display:flex;justify-content:flex-end}
+    .copy-btn{min-height:32px;padding:0 11px;border-radius:999px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.10);color:var(--text);font-size:12px;font-weight:800}
+    .copy-btn.done{background:rgba(120,241,222,.18);border-color:rgba(120,241,222,.28);color:#dffff8}
+
+    .calendar-switch{display:flex;gap:10px;overflow:auto;padding-bottom:10px;margin-bottom:12px}
+    .calendar-btn{white-space:nowrap;min-height:42px;padding:10px 18px;border-radius:999px;background:linear-gradient(135deg,rgba(47,111,237,.20),rgba(232,93,117,.15));border:1px solid rgba(255,255,255,.10);color:var(--text);font-weight:800}
+    .calendar-btn.active{background:linear-gradient(135deg,rgba(47,111,237,.28),rgba(232,93,117,.24))}
+    .calendar-layout{display:grid;grid-template-columns:1.05fr .95fr;gap:16px}
+    .calendar-card,.detail{padding:16px;border-radius:28px;background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.022));border:1px solid rgba(255,255,255,.075)}
+    .calendar-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}
+    .month-nav{display:flex;gap:10px}.month{width:42px;height:42px;border-radius:14px;background:rgba(255,255,255,.06);border:1px solid var(--line);color:var(--text)}
+    .calendar-phone{background:#f7f8fc;color:#121826;border-radius:28px;padding:16px 14px}
+    .calendar-phone-top{display:flex;justify-content:center;align-items:center;position:relative;margin-bottom:8px}.calendar-phone-top h4{font-size:15px}.calendar-phone-top .month{position:absolute;top:0;background:#edf1f8;border-color:#e3e9f2;color:#1f2937}.calendar-phone-top .prev{left:0}.calendar-phone-top .next{right:0}
+    .weekdays{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;font-size:12px;color:#6b7280;margin:10px 0 8px}.grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+    .day{aspect-ratio:1/1;position:relative;border-radius:18px;background:transparent;border:0;color:#111827;display:flex;align-items:flex-start;justify-content:flex-start;padding:8px}.day.empty{opacity:0}.day.today{background:#1f2937;color:#fff;border-radius:999px;width:38px;height:38px;justify-self:center;align-self:center;display:grid;place-items:center;padding:0}.day .n{font-size:14px;font-weight:600}.day .dot{position:absolute;left:50%;transform:translateX(-50%);bottom:8px;width:5px;height:5px;border-radius:999px;background:#60a5fa}.day.reserved{background:#eef2ff;border:1px solid #d9e0f8;cursor:pointer}.reserve-mini{position:absolute;left:50%;transform:translateX(-50%);bottom:7px;min-height:20px;padding:0 7px;border-radius:999px;background:#111827;color:#fff;font-size:9px;font-weight:800;display:inline-flex;align-items:center}.small-months{display:grid;grid-template-columns:repeat(6,minmax(44px,1fr));gap:8px;margin-top:14px}.sm{min-height:38px;border-radius:14px;background:#eef1f7;border:0;color:#111827;font-weight:700}.sm.active{background:#4b5563;color:#fff}
+    .empty-state{display:grid;align-content:center;gap:10px;min-height:240px}
+
+    .bottom{position:fixed;left:12px;right:12px;bottom:12px;z-index:30;padding:10px;border-radius:24px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+    .nav{min-height:54px;border-radius:16px;background:rgba(255,255,255,.05);border:1px solid var(--line);color:var(--text);font-size:12px}
+    .nav.active{background:linear-gradient(135deg,rgba(31,79,168,.38),rgba(225,75,98,.24));border-color:rgba(255,255,255,.12);box-shadow:0 10px 22px rgba(5,13,30,.28)}
+
+    .desktop-grid{display:grid;grid-template-columns:290px 1fr;gap:18px}
+    .side,.main{padding:18px;border-radius:30px;background:linear-gradient(180deg,rgba(16,38,67,.95),rgba(10,24,43,.90))}.side{position:sticky;top:14px;height:fit-content}.nav-list{display:grid;gap:10px;margin-top:16px}
+    .nav-desktop{min-height:48px;padding:0 16px;border-radius:16px;border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--text);text-align:left;font-weight:800}
+    .nav-desktop.active{background:linear-gradient(135deg,rgba(31,79,168,.38),rgba(225,75,98,.24));border-color:rgba(255,255,255,.12);box-shadow:0 10px 22px rgba(5,13,30,.28)}
+
+    @media (min-width:980px){.mobile{display:none}.desktop{display:block}.app{padding:14px}.bottom{display:none}}
+    @media (max-width:979px){.calendar-layout{grid-template-columns:1fr}}
+  
+    .logo-stage{
+      width:100%;
+      padding:26px 20px 22px;
+      border-radius:28px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:14px;
+      text-align:center;
+      background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.018));
+      border:1px solid rgba(255,255,255,.10);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 22px 44px rgba(0,0,0,.34);
+    }
+    .logo-mark{
+      width:190px !important;
+      height:190px !important;
+      border-radius:34px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:radial-gradient(circle at 50% 35%,rgba(255,255,255,.09),rgba(255,255,255,0) 68%);
+      border:1px solid rgba(255,255,255,.10);
+      margin:0 auto;
+    }
+    .logo-kicker{ display:none !important; }
+    .logo-subtitle{ display:none !important; }
+    .login-meta{ display:none !important; }
+    .login-shell{ margin-top:22px; display:grid; gap:12px; }
+
+    
+    .brand-head{
+      display:flex;
+      flex-direction:row;
+      align-items:center;
+      gap:10px;
+    }
+    .mini-logo.mini-logo-svg{
+      width:38px !important;
+      height:38px !important;
+      min-width:38px;
+      min-height:38px;
+      border-radius:12px;
+      overflow:hidden;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:linear-gradient(135deg,rgba(47,111,237,.22),rgba(232,93,117,.18));
+      border:1px solid rgba(255,255,255,.12);
+      flex-shrink:0;
+    }
+    .mini-logo.mini-logo-svg svg{
+      width:34px !important;
+      height:34px !important;
+      min-width:34px;
+      min-height:34px;
+    }
+    .brand-name{
+      font-family:'Plus Jakarta Sans',Inter,sans-serif;
+      font-size:22px;
+      font-weight:800;
+      letter-spacing:-0.2px;
+      margin:0;
+    }
+
+    </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script>
+  (function(){
+
+    
+    const APTS={
+      ovis:['201s','202s','301s','302s','401s','402s','501s','502s','601s'],
+      maros:['201pp','202pp','301pp','302pp','401pp','402pp'],
+      easton:['2A','2B','3A','3B']
+    };
+    function aptOptions(building){return (APTS[building]||[]).map(a=>`<option value="${a}">${a}</option>`).join('');}
+    const PAY_OPTS={
+      ovis:['Efectivo','Nequi','Bancolombia','Daviplata'],
+      maros:['Efectivo','Nequi','Bancolombia','Daviplata'],
+      easton:['Zelle','Venmo','Cash','CashApp']
+    };
+    function payOptions(building){return (PAY_OPTS[building]||PAY_OPTS.ovis).map(p=>`<option value="${p}">${p}</option>`).join('');}
+    function buildingOptions(){return STATE.user.buildings.map(b=>`<option value="${b}">${B[b]}</option>`).join('');}
+
+    // Delegated handlers for dynamic form buttons (survive renderApp re-renders)
+    document.addEventListener('change', function(e){
+      if(e.target && (e.target.id==='pf-building'||e.target.id==='ng-building')){
+        const prefix = e.target.id==='pf-building'?'pf':'ng';
+        const aptSel=document.getElementById(prefix+'-apt');
+        if(aptSel){aptSel.innerHTML=aptOptions(e.target.value);}
+        // Update currency label based on building
+        const isUSD = e.target.value==='easton';
+        const lbl=document.getElementById(prefix+'-currency-label');
+        const sym=document.getElementById(prefix+'-currency-symbol');
+        const inp=document.getElementById(prefix+'-amount');
+        if(lbl) lbl.textContent='$';
+        if(sym) sym.textContent='$';
+        if(inp) inp.placeholder=isUSD?'0.00':'0';
+        const paySel=document.getElementById(prefix+'-paytype');
+        if(paySel) paySel.innerHTML=payOptions(e.target.value);
+      }
+      // When checkin changes → set checkout min to checkin date
+      if(e.target && (e.target.id==='pf-checkin'||e.target.id==='ng-checkin')){
+        const pfx=e.target.id.startsWith('pf')?'pf':'ng';
+        const co=document.getElementById(pfx+'-checkout');
+        if(co&&e.target.value){co.min=e.target.value; if(co.value&&co.value<e.target.value) co.value='';}
+      }
+    });
+    document.addEventListener('click', function(e){
+      // ── Por Fuera add button ──
+      if(e.target && e.target.id==='pfAddBtn'){
+        const form=document.getElementById('pfGuestForm');
+        if(form){
+          const opening=form.style.display!=='block';
+          form.style.display=opening?'block':'none';
+          if(opening){
+            const today=new Date().toISOString().slice(0,10);
+            ['pf-checkin','pf-checkout'].forEach(id=>{const el=document.getElementById(id);if(el){el.min=today;el.value='';}});
+            const bSel=document.getElementById('pf-building');
+            if(bSel) bSel.innerHTML=buildingOptions();
+            const aSel=document.getElementById('pf-apt');
+            if(bSel&&aSel) aSel.innerHTML=aptOptions(bSel.value);
+            const paySel2=document.getElementById('pf-paytype');
+            if(paySel2&&bSel) paySel2.innerHTML=payOptions(bSel.value);
+            const lbl=document.getElementById('pf-currency-label');
+            if(lbl) lbl.textContent='$';
+            const paySel=document.getElementById('pf-paytype');
+            if(paySel&&bSel) paySel.innerHTML=payOptions(bSel.value);
+          }
+        }
+      }
+      if(e.target && e.target.id==='pf-cancel'){
+        const form=document.getElementById('pfGuestForm');
+        if(form) form.style.display='none';
+      }
+      if(e.target && e.target.id==='pf-save'){
+        const name=(document.getElementById('pf-name').value||'').trim();
+        const building=document.getElementById('pf-building').value;
+        const apt=(document.getElementById('pf-apt').value||'').trim();
+        const checkin=document.getElementById('pf-checkin').value;
+        const checkout=document.getElementById('pf-checkout').value;
+        const payment=document.getElementById('pf-paystatus').value;
+        const paytype=document.getElementById('pf-paytype').value;
+        const amount=parseFloat(document.getElementById('pf-amount').value)||0;
+        if(!name||!checkin||!checkout){alert('Nombre, check-in y check-out son obligatorios.');return;}
+        const currency=building==='easton'?'USD':'COP'; DATA.outside.push({guest:name,building,apt,checkin,checkout,payment,paytype,amount,currency,source:'Por Fuera'});
+        renderApp();
+      }
+      // ── Próximos add button ──
+      if(e.target && e.target.id==='addGuestBtn'){
+        const form=document.getElementById('addGuestForm');
+        if(form){
+          const isOpen=form.style.display==='grid'||form.style.display==='block';
+          form.style.display=isOpen?'none':'block';
+          if(!isOpen){
+            const today=new Date().toISOString().slice(0,10);
+            ['ng-checkin','ng-checkout'].forEach(id=>{const el=document.getElementById(id);if(el){el.min=today;el.value='';}});
+            const bSel=document.getElementById('ng-building');
+            if(bSel) bSel.innerHTML=buildingOptions();
+            const aSel=document.getElementById('ng-apt');
+            if(bSel&&aSel) aSel.innerHTML=aptOptions(bSel.value);
+            const paySel2=document.getElementById('ng-paytype');
+            if(paySel2&&bSel) paySel2.innerHTML=payOptions(bSel.value);
+            const lbl=document.getElementById('ng-currency-label');
+            if(lbl) lbl.textContent='$';
+            const paySel=document.getElementById('ng-paytype');
+            if(paySel&&bSel) paySel.innerHTML=payOptions(bSel.value);
+          }
+        }
+      }
+      if(e.target && e.target.id==='ng-cancel'){
+        const form=document.getElementById('addGuestForm');
+        if(form) form.style.display='none';
+      }
+      if(e.target && e.target.id==='ng-save'){
+        const name=(document.getElementById('ng-name').value||'').trim();
+        const building=document.getElementById('ng-building').value;
+        const apt=(document.getElementById('ng-apt').value||'').trim();
+        const checkin=document.getElementById('ng-checkin').value;
+        const checkout=document.getElementById('ng-checkout').value;
+        const payment=document.getElementById('ng-paystatus').value;
+        const paytype=document.getElementById('ng-paytype').value;
+        const amount=parseFloat(document.getElementById('ng-amount').value)||0;
+        if(!name||!checkin||!checkout){alert('Nombre, check-in y check-out son obligatorios.');return;}
+        const currency=building==='easton'?'USD':'COP'; DATA.outside.push({guest:name,building,apt,checkin,checkout,payment,paytype,amount,currency,source:'Por Fuera'});
+        renderApp();
+      }
+    });
+
+    const FEED_URLS={
+      maros:'https://script.google.com/macros/s/AKfycbxletoB7XW5X-1w9aMkEqjI2g7vBah2DVOMUgotJCKNM8HLMQBg1OmM7uRf2fUDXxz_/exec',
+      easton:'https://script.google.com/macros/s/AKfycbx8fgOGOZ-nbL35kZVu38X7CctwRAhPlXUXFDNq0-hEPZ-Pr8KBZGyHrtMNWny97aae8A/exec',
+      mixed:'https://script.google.com/macros/s/AKfycbwW13GxK7ggf5XY6CePDifndOUBuok2ReZOlYuiJECj0wbCSTDAMArAOkU1HvP9jY8wAw/exec'
+    };
+    const USERS={
+      luchi:{name:'Luchi',role:'User',lang:'es',buildings:['ovis'],tabs:['general','mensajes','hospedados','proximos','calendario','porfuera','finanzas']},
+      maria:{name:'Maria',role:'User',lang:'es',buildings:['ovis','maros'],tabs:['general','mensajes','hospedados','proximos','calendario','porfuera','finanzas']},
+      mila:{name:'Mila',role:'User',lang:'es',buildings:['easton'],tabs:['general','mensajes','hospedados','proximos','calendario','porfuera','finanzas']},
+      milo:{name:'Milo',role:'Admin',lang:'es',buildings:['ovis','maros','easton'],tabs:['general','mensajes','hospedados','proximos','calendario','porfuera','finanzas']}
+    };
+    const APT_MAP={
+      ovis:['201s','202s','301s','302s','401s','402s','501s','502s','601s'],
+      maros:['201pp','202pp','301pp','302pp','401pp','402pp'],
+      easton:['2a','2b','3a','3b']
+    };
+    const B={ovis:'Ovis',maros:'Maros',easton:'Easton'};
+    const DATA={messages:[],calendar:[],guests:[],outside:[],upcoming:[],finance:[]};
+    const STATE={user:null,activeBuildings:['ovis','maros','easton'],tab:'general',ai:null,calendarView:'list',month:new Date(2026,4,1),selected:null,feedsLoaded:false,lastFeedAt:null,feedError:''};
+
+    function normalizeBuilding(rec){
+      const t=((rec.building||'')+' '+(rec.propertyGroup||'')).toLowerCase();
+      if(t.includes('easton')) return 'easton';
+      if(t.includes('ovis')) return 'ovis';
+      if(t.includes('maros')) return 'maros';
+      return 'maros';
+    }
+    function normalizeSource(rec){
+      const s=(rec.platform||rec.source||'').trim();
+      return s||'Direct';
+    }
+    function niceDateLabel(iso, building){
+      if(!iso) return buildingLang(building)==='en'?'No date':'Sin fecha';
+      const d=new Date(iso);
+      return d.toLocaleString(buildingLang(building)==='en'?'en-US':'es-CO',{year:'numeric',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});
+    }
+    function titleForRecord(rec, building){
+      const lang=buildingLang(building);
+      const platform=normalizeSource(rec);
+      if(rec.category==='payment_received') return lang==='en' ? `Payment received · ${platform}` : `Pago recibido · ${platform}`;
+      if(rec.status==='cancelled') return lang==='en' ? `Cancelled booking · ${platform}` : `Reserva cancelada · ${platform}`;
+      if(rec.status==='modified' || rec.category==='modification') return lang==='en' ? `Booking modified · ${platform}` : `Reserva modificada · ${platform}`;
+      if(rec.status==='pending') return lang==='en' ? `Pending request · ${platform}` : `Solicitud pendiente · ${platform}`;
+      return lang==='en' ? `Reservation update · ${platform}` : `Actualización de reserva · ${platform}`;
+    }
+    function questionForRecord(rec, building){
+      const lang=buildingLang(building);
+      const parts=[];
+      if(rec.guestName) parts.push((lang==='en'?'Guest: ':'Huésped: ')+rec.guestName);
+      if(rec.apartment) parts.push((lang==='en'?'Apt: ':'Apto: ')+rec.apartment);
+      if(rec.checkIn||rec.checkOut) parts.push((lang==='en'?'Stay: ':'Estadía: ')+(rec.checkIn||'?')+' → '+(rec.checkOut||'?'));
+      if(rec.paymentAmount) parts.push((lang==='en'?'Payment: ':'Pago: ')+rec.paymentAmount);
+      else if(rec.totalAmount) parts.push((lang==='en'?'Total: ':'Total: ')+rec.totalAmount);
+      if(rec.notes) parts.push(rec.notes);
+      return parts.join(' · ') || (rec.subject||'');
+    }
+    function paymentLabel(rec, building){
+      if(rec.paymentAmount) return rec.paymentAmount;
+      if(rec.status==='reference_only') return buildingLang(building)==='en'?'Reference':'Referencia';
+      if(rec.totalAmount) return rec.totalAmount;
+      return buildingLang(building)==='en'?'Pending':'Pendiente';
+    }
+    function financeBucketKey(rec){
+      return `${normalizeBuilding(rec)}|${rec.apartment||'Sin apto'}`;
+    }
+    function parseMoneyLoose(v){
+      if(!v) return 0;
+      const s=String(v).replace(/[^\d,.-]/g,'').trim();
+      if(!s) return 0;
+      if(s.includes(',') && s.includes('.')) return Number(s.replace(/,/g,''))||0;
+      if((s.match(/,/g)||[]).length===1 && !s.includes('.')){
+        const [a,b]=s.split(',');
+        if((b||'').length===2) return Number((a+'.'+b).replace(/[^\d.-]/g,''))||0;
+      }
+      return Number(s.replace(/,/g,''))||0;
+    }
+    function formatMoneyByBuilding(amount, building){
+      const lang=buildingLang(building);
+      const currency=building==='easton'?'USD':'COP';
+      return new Intl.NumberFormat(lang==='en'?'en-US':'es-CO',{style:'currency',currency,maximumFractionDigits:0}).format(amount||0);
+    }
+    function startOfWeek(d){const x=new Date(d); const day=x.getDay(); const diff=(day===0?-6:1-day); x.setDate(x.getDate()+diff); x.setHours(0,0,0,0); return x}
+    function startOfMonth(d){return new Date(d.getFullYear(),d.getMonth(),1)}
+    function startOfYear(d){return new Date(d.getFullYear(),0,1)}
+    function within(date,start){return date>=start}
+    async function loadFeeds(){
+      try{
+        STATE.feedError='';
+        const urls=Object.values(FEED_URLS);
+        const results=await Promise.all(urls.map(url=>fetch(url).then(r=>r.json()).catch(()=>({ok:false,reservations:[]}))));
+        const rows=results.filter(r=>r&&r.reservations).flatMap(r=>r.reservations||[]);
+        hydrateData(rows);
+        STATE.feedsLoaded=true;
+        STATE.lastFeedAt=new Date();
+      }catch(err){
+        STATE.feedError=String(err&&err.message||err);
+        STATE.feedsLoaded=true;
+      }
+    }
+    function hydrateData(rows){
+      const userBuildings=(STATE.user?.buildings||['ovis','maros','easton']).map(b=>b.toLowerCase());
+      function normalizeApt(building,rawApt){
+        const b=building.toLowerCase();
+        const raw=(rawApt||'').toLowerCase().replace(/[^a-z0-9]/g,'');
+        const valid=APT_MAP[b]||[];
+        for(const apt of valid){
+          if(apt.replace(/[^a-z0-9]/g,'')===raw) return apt.toUpperCase();
+        }
+        return null;
+      }
+      function userCanSee(building){
+        return userBuildings.includes(building.toLowerCase());
+      }
+      const now=new Date();
+      const week=startOfWeek(now), month=startOfMonth(now), year=startOfYear(now);
+      const messages=[]; const calendar=[]; const guests=[]; const outside=[]; const upcoming=[]; const financeMap={};
+      rows.forEach((rec,idx)=>{
+        const building=normalizeBuilding(rec);
+        if(!userCanSee(building)) return;
+        const source=normalizeSource(rec);
+        const aptNorm=normalizeApt(building,rec.apartment);
+        if(!aptNorm) return;
+        const apt=aptNorm.toLowerCase();
+        const start=rec.checkIn||''; const end=rec.checkOut||'';
+        const totalNum=parseMoneyLoose(rec.paymentAmount||rec.totalAmount);
+        const msgDate=new Date(rec.messageDate||Date.now());
+        messages.push({
+          id:'m'+idx,
+          title:titleForRecord(rec,building),
+          building,
+          source,
+          date:niceDateLabel(rec.messageDate,building),
+          tag:rec.category||rec.status||'update',
+          guest:rec.guestName||'—',
+          question:questionForRecord(rec,building)
+        });
+        if(start && end){
+          calendar.push({id:'r'+idx,building,apt:aptNorm,guest:rec.guestName||'—',phone:'',start,end,source});
+          const today=new Date(); today.setHours(0,0,0,0);
+          const sd=pd(start), ed=pd(end);
+          if(sd<=today && ed>=today){
+            guests.push({name:rec.guestName||'—',building,apt:aptNorm,dates:dateShort(start,end,buildingLang(building)),source});
+          }
+          if(sd>=today){
+            upcoming.push({title:`${B[building]} ${aptNorm} · ${rec.guestName||'Guest'}`,building,time:sd.toLocaleDateString(buildingLang(building)==='en'?'en-US':'es-CO',{month:'short',day:'numeric'})});
+          }
+        }
+        if(source.toLowerCase().includes('direct') || (rec.notes && rec.notes.toLowerCase().includes('direct'))){
+          outside.push({guest:rec.guestName||'—',building,apt:aptNorm,checkin:start||'',checkout:end||'',payment:paymentLabel(rec,building),paytype:source});
+        }
+        const k=`${building}|${aptNorm}`;
+        if(!financeMap[k]) financeMap[k]={building,apt:aptNorm,week:0,month:0,year:0};
+        if(totalNum>0){
+          if(within(msgDate,week)) financeMap[k].week+=totalNum;
+          if(within(msgDate,month)) financeMap[k].month+=totalNum;
+          if(within(msgDate,year)) financeMap[k].year+=totalNum;
+        }
+      });
+      DATA.messages=messages;
+      DATA.calendar=calendar.sort((a,b)=>a.start.localeCompare(b.start));
+      DATA.guests=guests;
+      DATA.outside=outside;
+      DATA.upcoming=upcoming.sort((a,b)=>a.time.localeCompare(b.time)).slice(0,18);
+      DATA.finance=Object.values(financeMap).map(x=>({apt:`${B[x.building]} ${String(x.apt).toUpperCase()}`,week:formatMoneyByBuilding(x.week,x.building),month:formatMoneyByBuilding(x.month,x.building),year:formatMoneyByBuilding(x.year,x.building)}));
+    };
+    
+    const root=document.getElementById('root');
+    const labelMap={es:{general:'General',mensajes:'Mensajes',hospedados:'Hospedados',proximos:'Próximos',calendario:'Calendario',porfuera:'Por Fuera',finanzas:'Finanzas',logout:'Salir',entry:'Entrar',user:'Usuario',invalid:'Usuario no encontrado.'},en:{general:'Overview',mensajes:'Messages',hospedados:'Current Guests',proximos:'Upcoming',calendario:'Calendar',porfuera:'Direct Bookings',finanzas:'Finance',logout:'Logout',entry:'Enter',user:'User',invalid:'User not found.'}};
+
+    function tr(key){return (labelMap[(STATE.user&&STATE.user.lang)||'es']||labelMap.es)[key]||key}
+    function buildingLang(building){return building==='easton'?'en':'es'}
+    function textForBuilding(building, es, en){return building==='easton'?en:es}
+    window.logoSVG=window.logoSVG=function logoSVG(){return `<svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><rect x="10" y="12" width="44" height="40" rx="14" fill="url(#g1)" fill-opacity=".18" stroke="rgba(255,255,255,.18)"/><path d="M18 40L32 22L46 40" stroke="url(#g2)" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M24 40V33C24 28.6 27.6 25 32 25C36.4 25 40 28.6 40 33V40" stroke="url(#g2)" stroke-width="4.2" stroke-linecap="round"/><defs><linearGradient id="g1" x1="10" y1="12" x2="54" y2="52" gradientUnits="userSpaceOnUse"><stop stop-color="#2F6FED"/><stop offset="1" stop-color="#E85D75"/></linearGradient><linearGradient id="g2" x1="18" y1="22" x2="46" y2="40" gradientUnits="userSpaceOnUse"><stop stop-color="#79F0E0"/><stop offset="1" stop-color="#FF8A9C"/></linearGradient></defs></svg>`}
+    function q(s){return document.querySelector(s)}
+    function qa(s){return [...document.querySelectorAll(s)]}
+    function srcClass(s){s=(s||'').toLowerCase();if(s.includes('booking'))return'booking';if(s.includes('airbnb'))return'airbnb';if(s.includes('vrbo'))return'vrbo';if(s.includes('direct'))return'directo';return'blue'}
+    function badge(s){return `<span class="pill ${srcClass(s)}">${s}</span>`}
+    function pd(s){const [y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d)}
+    function ymd(d){return new Date(d.getFullYear(),d.getMonth(),d.getDate()).toISOString().slice(0,10)}
+    function dateShort(a,b,lang){const s=pd(a),e=pd(b);return `${s.toLocaleDateString(lang==='en'?'en-US':'es-CO',{month:'short',day:'numeric'})} · ${e.toLocaleDateString(lang==='en'?'en-US':'es-CO',{month:'short',day:'numeric'})}`}
+    function byBuild(arr){const allowed=STATE.user.buildings;return arr.filter(x=>allowed.includes(x.building)&&STATE.activeBuildings.includes(x.building))}
+    function title(){return tr(STATE.tab)}
+
+    function frozitaReplies(m){
+      if(buildingLang(m.building)==='en'){
+        return [
+          `Hi ${m.guest}, absolutely. We will send your parking instructions and self check-in details before arrival.`,
+          `Hi ${m.guest}, thanks for reaching out. Late arrival is fine, and we’ll share the access steps and parking information shortly.`,
+          `Hi ${m.guest}, yes — we can help with that. We’ll send the check-in guide and parking details so your arrival is easy.`
+        ];
+      }
+      return [
+        `Hola ${m.guest}, claro que sí. En un momento te compartimos las instrucciones de ingreso y la clave del Wi‑Fi.`,
+        `Hola ${m.guest}, gracias por escribirnos. Tu llegada tarde no es problema y enseguida te enviamos los pasos de check-in.`,
+        `Hola ${m.guest}, con gusto te ayudamos. Ahora mismo te mandamos la información de ingreso para que llegues sin problema.`
+      ];
+    }
+
+    async function renderLogin(){
+      root.innerHTML=`<div class="boot"><div class="login glass"><div class="logo-wrap"><div class="logo-stage"><div class="logo-mark"><svg viewBox="0 0 1024 1024" style="width: 280px; height: 280px;" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="bgw1" cx="50%" cy="50%" r="72%"><stop offset="0%" stop-color="#1c2547"/><stop offset="100%" stop-color="#080f24"/></radialGradient>
+        <linearGradient id="goldw1" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#f5deaa"/><stop offset="50%" stop-color="#d4b370"/><stop offset="100%" stop-color="#9b7c3f"/></linearGradient>
+        <linearGradient id="litw1" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#ffeed0"/><stop offset="100%" stop-color="#f5deaa"/></linearGradient>
+        <pattern id="winPatw1" patternUnits="userSpaceOnUse" width="34" height="44"><rect x="6" y="6" width="22" height="32" fill="#0a1428" opacity="0.92"/></pattern>
+        <filter id="grainw1"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="3"/><feColorMatrix values="0 0 0 0 0.95 0 0 0 0 0.82 0 0 0 0 0.5 0 0 0 0.13 0"/></filter>
+        <clipPath id="clipAllw1"><rect width="1024" height="1024" rx="180"/></clipPath>
+        <clipPath id="clipLTw1"><rect x="242" y="240" width="140" height="480"/></clipPath>
+        <clipPath id="clipMTw1"><rect x="462" y="400" width="100" height="320"/></clipPath>
+        <clipPath id="clipRTw1"><rect x="642" y="240" width="140" height="480"/></clipPath>
+      </defs>
+      <rect width="1024" height="1024" rx="180" fill="url(#bgw1)"/>
+      <g stroke="url(#goldw1)" stroke-width="1.5" opacity="0.22" clip-path="url(#clipAllw1)">
+        <line x1="512" y1="512" x2="512" y2="-200"/><line x1="512" y1="512" x2="731" y2="-184"/>
+        <line x1="512" y1="512" x2="924" y2="-72"/><line x1="512" y1="512" x2="1080" y2="115"/>
+        <line x1="512" y1="512" x2="1186" y2="349"/><line x1="512" y1="512" x2="1216" y2="600"/>
+        <line x1="512" y1="512" x2="1166" y2="841"/><line x1="512" y1="512" x2="1042" y2="1052"/>
+        <line x1="512" y1="512" x2="858" y2="1198"/><line x1="512" y1="512" x2="634" y2="1268"/>
+        <line x1="512" y1="512" x2="390" y2="1268"/><line x1="512" y1="512" x2="166" y2="1198"/>
+        <line x1="512" y1="512" x2="-18" y2="1052"/><line x1="512" y1="512" x2="-142" y2="841"/>
+        <line x1="512" y1="512" x2="-192" y2="600"/><line x1="512" y1="512" x2="-162" y2="349"/>
+        <line x1="512" y1="512" x2="-56" y2="115"/><line x1="512" y1="512" x2="100" y2="-72"/>
+        <line x1="512" y1="512" x2="293" y2="-184"/>
+      </g>
+      <rect width="1024" height="1024" rx="180" filter="url(#grainw1)" opacity="0.5"/>
+      <rect x="72" y="72" width="880" height="880" rx="140" fill="none" stroke="url(#goldw1)" stroke-width="3" opacity="0.78"/>
+      <rect x="92" y="92" width="840" height="840" rx="122" fill="none" stroke="url(#goldw1)" stroke-width="1" opacity="0.45"/>
+      <g fill="url(#goldw1)" opacity="0.9">
+        <circle cx="120" cy="120" r="4"/><circle cx="904" cy="120" r="4"/>
+        <circle cx="120" cy="904" r="4"/><circle cx="904" cy="904" r="4"/>
+        <rect x="488" y="168" width="5" height="44"/><rect x="510" y="168" width="6" height="44"/><rect x="533" y="168" width="5" height="44"/>
+      </g>
+      <g stroke="url(#goldw1)" stroke-width="1.2" opacity="0.7">
+        <line x1="420" y1="190" x2="478" y2="190"/><line x1="546" y1="190" x2="604" y2="190"/>
+      </g>
+      <g stroke="url(#goldw1)" stroke-width="2.5" fill="none" opacity="0.55">
+        <line x1="312" y1="240" x2="512" y2="400"/><line x1="712" y1="240" x2="512" y2="400"/>
+      </g>
+      <g clip-path="url(#clipLTw1)">
+        <rect x="242" y="240" width="140" height="480" fill="url(#goldw1)"/>
+        <rect x="242" y="240" width="140" height="480" fill="url(#winPatw1)"/>
+        <rect x="248" y="290" width="22" height="32" fill="url(#litw1)"/>
+        <rect x="316" y="378" width="22" height="32" fill="url(#litw1)"/>
+        <rect x="350" y="466" width="22" height="32" fill="url(#litw1)"/>
+        <rect x="282" y="554" width="22" height="32" fill="url(#litw1)"/>
+        <rect x="350" y="642" width="22" height="32" fill="url(#litw1)"/>
+      </g>
+      <g fill="url(#goldw1)"><rect x="252" y="222" width="120" height="18"/><rect x="266" y="208" width="92" height="14"/></g>
+      <g clip-path="url(#clipRTw1)">
+        <rect x="642" y="240" width="140" height="480" fill="url(#goldw1)"/>
+        <rect x="642" y="240" width="140" height="480" fill="url(#winPatw1)"/>
+        <rect x="682" y="290" width="22" height="32" fill="url(#litw1)"/>
+        <rect x="750" y="378" width="22" height="32" fill="url(#litw1)"/>
+        <rect x="716" y="466" width="22" height="32" fill="url(#litw1)"/>
+        <rect x="750" y="554" width="22" height="32" fill="url(#litw1)"/>
+        <rect x="682" y="642" width="22" height="32" fill="url(#litw1)"/>
+      </g>
+      <g fill="url(#goldw1)"><rect x="652" y="222" width="120" height="18"/><rect x="666" y="208" width="92" height="14"/></g>
+      <g clip-path="url(#clipMTw1)">
+        <rect x="462" y="400" width="100" height="320" fill="url(#goldw1)"/>
+        <rect x="462" y="400" width="100" height="320" fill="url(#winPatw1)"/>
+        <rect x="478" y="438" width="22" height="32" fill="url(#litw1)"/>
+        <rect x="512" y="482" width="22" height="32" fill="url(#litw1)"/>
+        <rect x="478" y="570" width="22" height="32" fill="url(#litw1)"/>
+      </g>
+      <g fill="url(#goldw1)">
+        <rect x="468" y="384" width="88" height="16"/><rect x="478" y="368" width="68" height="16"/>
+        <rect x="494" y="340" width="36" height="28"/><rect x="506" y="320" width="12" height="20"/>
+        <rect x="510" y="306" width="4" height="14"/>
+      </g>
+      <rect x="200" y="720" width="624" height="6" fill="url(#goldw1)"/>
+      <line x1="180" y1="734" x2="844" y2="734" stroke="url(#goldw1)" stroke-width="1.5" opacity="0.7"/>
+      <text x="512" y="808" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-style="italic" font-weight="500" font-size="56" letter-spacing="1" fill="url(#goldw1)">MarosAirbnb</text>
+      <text x="512" y="876" text-anchor="middle" font-family="Georgia, serif" font-size="20" letter-spacing="8" fill="url(#goldw1)" opacity="0.75">III · PROPIEDADES · BOUTIQUE</text>
+    </svg></div><h1 class="logo-title">MarosAirbnb</h1></div><div class="login-shell"><div class="field"><input id="user" name="username" autocomplete="username" placeholder=""></div><div class="error" id="err">${tr('invalid')}</div><button class="btn btn-primary" id="go">${tr('entry')}</button><div class="login-phrase">Respira hondo. Hoy también es una nueva oportunidad.</div></div></div></div>`;
+      q('#go').onclick=()=>{const k=(q('#user').value||'').trim().toLowerCase(); if(!USERS[k]){q('#err').style.display='block'; return;} STATE.user=USERS[k]; STATE.activeBuildings=[...STATE.user.buildings]; renderApp();};
+      q('#user').addEventListener('keydown',e=>{if(e.key==='Enter') q('#go').click()});
+    }
+
+    function buildingButtons(){return STATE.user.buildings.map(b=>`<button class="btn building ${STATE.activeBuildings.includes(b)?'active':'off'}" data-b="${b}"><span class="b-name">${B[b]}</span></button>`).join('')}
+    function mobileNav(){return STATE.user.tabs.map(t=>`<button class="btn nav ${STATE.tab===t?'active':''}" data-tab="${t}">${tr(t)}</button>`).join('')}
+    function desktopNav(){return STATE.user.tabs.map(t=>`<button class="btn nav-desktop ${STATE.tab===t?'active':''}" data-tab="${t}">${tr(t)}</button>`).join('')}
+
+    function aiBlock(m){
+      const open=STATE.ai===m.id;
+      const suggestions=frozitaReplies(m);
+      const lang=buildingLang(m.building);
+      return `<div class="assistant-wrap"><button class="btn assistant-fab" data-ai="${m.id}"><span class="assistant-icon">✦</span><span><strong>Frozita</strong> ${lang==='en'?'replies':'responde'}</span></button>${open?`<div class="assistant-panel"><div class="meta" style="margin:0;font-weight:800;color:#eef7ff">Frozita ${lang==='en'?'replies':'responde'}</div><div class="meta" style="margin:0">${m.question}</div><div class="assistant-list">${suggestions.map((t,i)=>`<div class="assistant-suggestion"><div class="assistant-top"><span class="assistant-index">${i+1}</span><div class="assistant-text">${t}</div></div><div class="copy-row"><button class="btn copy-btn" data-copy="${encodeURIComponent(t)}">${lang==='en'?'Copy':'Copiar'}</button></div></div>`).join('')}</div></div>`:''}</div>`
+    }
+
+    function monthView(){
+      const y=STATE.month.getFullYear(),m=STATE.month.getMonth(); const first=new Date(y,m,1); const offset=first.getDay(); const days=new Date(y,m+1,0).getDate(); let cells='';
+      for(let i=0;i<offset;i++) cells += `<div class="day empty"></div>`;
+      for(let d=1; d<=days; d++){
+        const date=new Date(y,m,d); const ds=ymd(date); const res=byBuild(DATA.calendar).find(r=>ds>=r.start&&ds<=r.end); const today=ymd(new Date())===ds;
+        if(today){cells += `<button class="day today ${res?'reserved':''}" ${res?`data-r="${res.id}"`:''}><span class="n">${d}</span></button>`}
+        else {cells += `<button class="day ${res?'reserved':''}" ${res?`data-r="${res.id}"`:''}><span class="n">${d}</span>${res?`<span class="reserve-mini">Reservado</span>`:`<span class="dot"></span>`}</button>`}
+      }
+      return `<div class="calendar-card"><div class="calendar-head"><div><div class="sub" style="margin:0;font-weight:800;color:#e7eefc">Calendario mensual</div><h3 style="margin-top:4px">${STATE.month.toLocaleDateString('es-CO',{month:'long',year:'numeric'})}</h3></div><div class="month-nav"><button class="btn month" data-m="-1">←</button><button class="btn month" data-m="1">→</button></div></div><div class="pill-row"><span class="pill booking">Booking</span><span class="pill airbnb">Airbnb</span><span class="pill vrbo">Vrbo</span><span class="pill directo">Special day</span></div><div class="calendar-phone"><div class="calendar-phone-top"><button class="btn month prev" data-m="-1">‹</button><h4>${STATE.month.toLocaleDateString('en-US',{month:'long',year:'numeric'})}</h4><button class="btn month next" data-m="1">›</button></div><div class="weekdays">${['S','M','T','W','T','F','S'].map(x=>`<div>${x}</div>`).join('')}</div><div class="grid">${cells}</div><div class="small-months">${['Jan','Feb','Mar','Apr','May','Jun'].map((x,i)=>`<button class="btn sm ${m===i?'active':''}" data-sm="${i}">${x}</button>`).join('')}</div></div></div>`
+    }
+
+    function detail(){
+      const r=byBuild(DATA.calendar).find(x=>x.id===STATE.selected);
+      if(!r) return `<div class="detail empty-state"><div class="sub" style="margin:0;font-weight:800;color:#e7eefc">Reserva</div><h4>Toca un día reservado</h4><div class="sub" style="margin:0">Aquí verás fechas, teléfono y canal.</div></div>`;
+      const lang=buildingLang(r.building);
+      return `<div class="detail"><div class="sub" style="margin:0;font-weight:800;color:#e7eefc">${lang==='en'?'Selected reservation':'Reserva seleccionada'}</div><h4 style="margin-top:8px">${r.guest}</h4><div class="sub">${B[r.building]} · ${r.apt}</div><div class="meta"><strong>${lang==='en'?'Dates':'Fechas'}:</strong> ${dateShort(r.start,r.end,lang)}</div><div class="meta"><strong>${lang==='en'?'Phone':'Teléfono'}:</strong> ${r.phone}</div><div class="meta"><strong>${lang==='en'?'Source':'Canal'}:</strong> ${r.source}</div></div>`
+    }
+
+    function content(){
+      if(STATE.tab==='general') return `<div class="list"><div class="item"><h4>${STATE.user.lang==='en'?'Operating overview':'Actividad por edificio'}</h4><div class="pill-row">${STATE.activeBuildings.map(b=>`<span class="pill green">${B[b]}</span>`).join('')}</div><div class="meta">${STATE.user.lang==='en'?'Quick overview of your current operation.':'Vista general de la operación actual.'}</div></div></div>`;
+      if(STATE.tab==='mensajes') return `<div class="list">${byBuild(DATA.messages).map(m=>`<div class="item"><div class="row"><div><h4>${m.title}</h4><div class="sub" style="margin-top:6px">${badge(m.source)} <span style="margin-left:8px">${m.date}</span></div></div></div><div class="meta">${B[m.building]} · ${m.guest} · ${m.question}</div><div class="pill-row"><span class="pill ${String(m.tag).toLowerCase().includes('preg')||String(m.tag).toLowerCase().includes('question')?'amber':'green'}">${m.tag}</span></div>${String(m.tag).toLowerCase().includes('preg')||String(m.tag).toLowerCase().includes('question')?aiBlock(m):''}</div>`).join('')}</div>`;
+      if(STATE.tab==='hospedados') return `<div class="list">${byBuild(DATA.guests).map(g=>`<div class="item"><div class="row"><div><h4>${g.name}</h4><div class="sub">${B[g.building]} · ${g.apt}</div></div>${badge(g.source)}</div><div class="meta">${g.dates}</div></div>`).join('')}</div>`;
+      if(STATE.tab==='proximos'){
+        const tomorrow=new Date(); tomorrow.setDate(tomorrow.getDate()+1);
+        const tmStr=tomorrow.toLocaleDateString('es-CO',{weekday:'long',day:'numeric',month:'long'});
+        const tmISO=tomorrow.toISOString().slice(0,10);
+        const allRes=[...DATA.calendar,...DATA.outside.map(o=>({...o,source:'Por Fuera',start:o.checkin,end:o.checkout,phone:'-'}))];
+        const filtered=byBuild(allRes);
+        const outs=filtered.filter(r=>r.checkout===tmISO||r.end===tmISO);
+        const ins=filtered.filter(r=>r.checkin===tmISO||r.start===tmISO);
+        const payMethods=['Efectivo','Nequi','Bancolombia','Daviplata','Otro'];
+        const sectionHTML=(arr,label,pill)=>arr.length===0?`<div class="empty-state" style="min-height:80px;padding:14px"><span style="color:var(--muted);font-size:13px">Sin ${label} mañana</span></div>`:arr.map(r=>`<div class="item"><div class="row"><div><h4>${r.guest||r.title}</h4><div class="sub">${B[r.building]||''} · ${r.apt||''}</div></div><span class="pill ${pill}">${label}</span></div><div class="meta" style="margin-top:6px">📅 ${r.checkout||r.end||r.checkin||r.start} &nbsp;·&nbsp; ${r.source||'—'}</div></div>`).join('');
+        return `<div>
+          <div class="sub" style="margin:0 0 4px;font-weight:900;color:#eef5ff;font-size:15px">📅 Para Mañana</div>
+          <div class="sub" style="margin:0 0 16px;color:var(--muted)">${tmStr}</div>
+          <div class="sub" style="margin:0 0 8px;font-weight:800;color:#ffd6de">🔴 Check-Out</div>
+          <div class="list" style="margin-bottom:18px">${sectionHTML(outs,'Check-Out','rose')}</div>
+          <div class="sub" style="margin:0 0 8px;font-weight:800;color:#b8d6ff">🟢 Check-In</div>
+          <div class="list" style="margin-bottom:20px">${sectionHTML(ins,'Check-In','blue')}</div>
+          <button class="btn btn-primary" id="addGuestBtn" style="width:100%;min-height:50px;border-radius:18px;font-size:15px">＋ Agregar Huésped</button>
+          <div id="addGuestForm" style="display:none;margin-top:16px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10);border-radius:22px;padding:18px;display:none">
+            <div class="sub" style="margin:0 0 14px;font-weight:900;color:#eef5ff">Nuevo Huésped · Por Fuera</div>
+            <div style="display:grid;gap:10px">
+              <input id="ng-name" placeholder="Nombre del huésped" style="width:100%;min-height:48px;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:#f4f7ff;padding:0 14px;font-size:14px;outline:none">
+              <select id="ng-building" style="width:100%;min-height:48px;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:rgba(10,25,48,.9);color:#f4f7ff;padding:0 14px;font-size:14px;outline:none"><option value="ovis">Ovis</option><option value="maros">Maros</option><option value="easton">Easton</option></select>
+              <select id="ng-apt" style="width:100%;min-height:48px;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:rgba(10,25,48,.9);color:#f4f7ff;padding:0 14px;font-size:14px;outline:none"><option>Seleccionar edificio primero</option></select>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+                <div><div class="sub" style="margin:0 0 5px;font-size:12px">Check-In</div><input type="date" id="ng-checkin" style="width:100%;min-height:46px;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:#f4f7ff;padding:0 10px;font-size:13px;outline:none"></div>
+                <div><div class="sub" style="margin:0 0 5px;font-size:12px">Check-Out</div><input type="date" id="ng-checkout" style="width:100%;min-height:46px;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:#f4f7ff;padding:0 10px;font-size:13px;outline:none"></div>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+                <div><div class="sub" style="margin:0 0 5px;font-size:12px">Pago</div>
+                <select id="ng-paystatus" style="width:100%;min-height:46px;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:rgba(10,25,48,.9);color:#f4f7ff;padding:0 10px;font-size:13px;outline:none"><option>Pagado</option><option>Pendiente</option></select></div>
+                <div><div class="sub" style="margin:0 0 5px;font-size:12px">Tipo de Pago</div>
+                <select id="ng-paytype" style="width:100%;min-height:46px;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:rgba(10,25,48,.9);color:#f4f7ff;padding:0 10px;font-size:13px;outline:none"><option>Efectivo</option><option>Nequi</option><option>Bancolombia</option><option>Daviplata</option><option>Otro</option></select></div>
+              </div>
+              <div>
+                <div class="sub" style="margin:0 0 5px;font-size:12px">💰 Valor de la Reserva · <span id="ng-currency-label">$</span></div>
+                <div style="position:relative;display:flex;align-items:center">
+                  <span style="position:absolute;left:14px;color:#a0b4d0;font-size:15px;font-weight:700;pointer-events:none" id="ng-currency-symbol">$</span>
+                  <input id="ng-amount" type="number" placeholder="0" min="0" style="width:100%;min-height:48px;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:#f4f7ff;padding:0 14px 0 30px;font-size:15px;font-weight:600;outline:none">
+                </div>
+              </div>
+              <div style="display:flex;gap:10px;margin-top:4px">
+                <button class="btn btn-primary" id="ng-save" style="flex:1;min-height:48px;border-radius:14px">Guardar</button>
+                <button class="btn ghost" id="ng-cancel" style="flex:1;min-height:48px;border-radius:14px">Cancelar</button>
+              </div>
+            </div>
+          </div>
+        </div>`;
+      }
+      if(STATE.tab==='calendario') return `<div><div class="calendar-switch"><button class="btn calendar-btn ${STATE.calendarView==='month'?'active':''}" data-cal="month">Calendario mensual</button></div>${STATE.calendarView==='list'?`<div class="sub" style="margin:0 0 12px">Toca la burbuja para abrir la vista mensual.</div><div class="list">${byBuild(DATA.calendar).map(r=>`<div class="item"><div class="row"><div><h4>${r.guest}</h4><div class="sub">${B[r.building]} · ${r.apt}</div></div>${badge(r.source)}</div><div class="meta">${dateShort(r.start,r.end,buildingLang(r.building))} · ${r.phone}</div></div>`).join('')}</div>`:`<div class="calendar-switch"><button class="btn calendar-btn active" data-cal="list">Volver al calendario</button></div><div class="calendar-layout">${monthView()}${detail()}</div>`}</div>`;
+      if(STATE.tab==='porfuera') return `<div>
+          <div class="sub" style="margin:0 0 12px;font-weight:900;color:#eef5ff;font-size:15px">Reservas Directas · Por Fuera</div>
+          <div class="list" style="margin-bottom:18px">${byBuild(DATA.outside).map(o=>`<div class="item"><div class="row"><div><h4>${o.guest}</h4><div class="sub">${B[o.building]||''} · ${o.apt||''}</div></div><span class="pill green">${o.payment||''}</span></div><div class="meta" style="margin-top:6px">${o.checkin||o.dates||''} → ${o.checkout||''} ${o.paytype?'· '+o.paytype:''} ${o.amount?'· <span style="color:#7ed97e;font-weight:700">'+(o.building==='easton'?'USD':'COP')+' $'+Number(o.amount).toLocaleString(o.building==='easton'?'en-US':'es-CO')+'</span>':''}</div></div>`).join('')}</div>
+          <button class="btn btn-primary" id="pfAddBtn" style="width:100%;min-height:50px;border-radius:18px;font-size:15px">＋ Agregar Huésped</button>
+          <div id="pfGuestForm" style="display:none;margin-top:16px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10);border-radius:22px;padding:18px">
+            <div class="sub" style="margin:0 0 14px;font-weight:900;color:#eef5ff">Nuevo Huésped · Por Fuera</div>
+            <div style="display:grid;gap:10px">
+              <input id="pf-name" placeholder="Nombre del huésped" style="width:100%;min-height:48px;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:#f4f7ff;padding:0 14px;font-size:14px;outline:none">
+              <select id="pf-building" style="width:100%;min-height:48px;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:rgba(10,25,48,.9);color:#f4f7ff;padding:0 14px;font-size:14px;outline:none"><option value="ovis">Ovis</option><option value="maros">Maros</option><option value="easton">Easton</option></select>
+              <select id="pf-apt" style="width:100%;min-height:48px;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:rgba(10,25,48,.9);color:#f4f7ff;padding:0 14px;font-size:14px;outline:none"><option>Seleccionar edificio primero</option></select>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+                <div><div class="sub" style="margin:0 0 5px;font-size:12px">Check-In</div><input type="date" id="pf-checkin" style="width:100%;min-height:46px;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:#f4f7ff;padding:0 10px;font-size:13px;outline:none"></div>
+                <div><div class="sub" style="margin:0 0 5px;font-size:12px">Check-Out</div><input type="date" id="pf-checkout" style="width:100%;min-height:46px;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:#f4f7ff;padding:0 10px;font-size:13px;outline:none"></div>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+                <div><div class="sub" style="margin:0 0 5px;font-size:12px">Pago</div>
+                <select id="pf-paystatus" style="width:100%;min-height:46px;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:rgba(10,25,48,.9);color:#f4f7ff;padding:0 10px;font-size:13px;outline:none"><option>Pagado</option><option>Pendiente</option></select></div>
+                <div><div class="sub" style="margin:0 0 5px;font-size:12px">Tipo de Pago</div>
+                <select id="pf-paytype" style="width:100%;min-height:46px;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:rgba(10,25,48,.9);color:#f4f7ff;padding:0 10px;font-size:13px;outline:none"><option>Efectivo</option><option>Nequi</option><option>Bancolombia</option><option>Daviplata</option><option>Otro</option></select></div>
+              </div>
+              <div>
+                <div class="sub" style="margin:0 0 5px;font-size:12px">💰 Valor de la Reserva · <span id="pf-currency-label">$</span></div>
+                <div style="position:relative;display:flex;align-items:center">
+                  <span style="position:absolute;left:14px;color:#a0b4d0;font-size:15px;font-weight:700;pointer-events:none" id="pf-currency-symbol">$</span>
+                  <input id="pf-amount" type="number" placeholder="0" min="0" style="width:100%;min-height:48px;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:#f4f7ff;padding:0 14px 0 30px;font-size:15px;font-weight:600;outline:none">
+                </div>
+              </div>
+              <div style="display:flex;gap:10px;margin-top:4px">
+                <button class="btn btn-primary" id="pf-save" style="flex:1;min-height:48px;border-radius:14px">Guardar</button>
+                <button class="btn ghost" id="pf-cancel" style="flex:1;min-height:48px;border-radius:14px">Cancelar</button>
+              </div>
+            </div>
+          </div>
+        </div>`;
+      return `<div class="list">${DATA.finance.map(f=>`<div class="item"><div class="row"><div><h4>${f.apt}</h4><div class="sub">${STATE.user.lang==='en'?'Week':'Semana'}: ${f.week}</div></div><span class="pill blue">${STATE.user.lang==='en'?'Month':'Mes'}: ${f.month}</span></div><div class="meta">${STATE.user.lang==='en'?'Year':'Año'}: ${f.year}</div></div>`).join('')}</div>`;
+    }
+
+    async function renderApp(){ if(!STATE.feedsLoaded) await loadFeeds(); 
+      root.innerHTML=`<div class="app ready"><div class="mobile"><div class="top glass"><div class="top-head"><div class="brand-head"><div class="mini-logo mini-logo-svg"><svg viewBox="0 0 1024 1024" style="width: 280px; height: 280px;" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="bgw1" cx="50%" cy="50%" r="72%"><stop offset="0%" stop-color="#1c2547"/><stop offset="100%" stop-color="#080f24"/></radialGradient>
+        <linearGradient id="goldw1" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#f5deaa"/><stop offset="50%" stop-color="#d4b370"/><stop offset="100%" stop-color="#9b7c3f"/></linearGradient>
+        <linearGradient id="litw1" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#ffeed0"/><stop offset="100%" stop-color="#f5deaa"/></linearGradient>
+        <pattern id="winPatw1" patternUnits="userSpaceOnUse" width="34" height="44"><rect x="6" y="6" width="22" height="32" fill="#0a1428" opacity="0.92"/></pattern>
+        <filter id="grainw1"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="3"/><feColorMatrix values="0 0 0 0 0.95 0 0 0 0 0.82 0 0 0 0 0.5 0 0 0 0.13 0"/></filter>
+        <clipPath id="clipAllw1"><rect width="1024" height="1024" rx="180"/></clipPath>
+        <clipPath id="clipLTw1"><rect x="242" y="240" width="140" height="480"/></clipPath>
+        <clipPath id="clipMTw1"><rect x="462" y="400" width="100" height="320"/></clipPath>
+        <clipPath id="clipRTw1"><rect x="642" y="240" width="140" height="480"/></clipPath>
+      </defs>
+      <rect width="1024" height="1024" rx="180" fill="url(#bgw1)"/>
+      <g stroke="url(#goldw1)" stroke-width="1.5" opacity="0.22" clip-path="url(#clipAllw1)">
+        <line x1="512" y1="512" x2="512" y2="-200"/><line x1="512" y1="512" x2="731" y2="-184"/>
+        <line x1="512" y1="512" x2="924" y2="-72"/><line x1="512" y1="512" x2="1080" y2="115"/>
+        <line x1="512" y1="512" x2="1186" y2="349"/><line x1="512" y1="512" x2="1216" y2="600"/>
+        <line x1="512" y1="512" x2="1166" y2="841"/><line x1="512" y1="512" x2="1042" y2="1052"/>
+        <line x1="512" y1="512" x2="858" y2="1198"/><line x1="512" y1="512" x2="634" y2="1268"/>
+        <line x1="512" y1="512" x2="390" y2="1268"/><line x1="512" y1="512" x2="166" y2="1198"/>
+        <line x1="512" y1="512" x2="-18" y2="1052"/><line x1="512" y1="512" x2="-142" y2="841"/>
+        <line x1="512" y1="512" x2="-192" y2="600"/><line x1="512" y1="512" x2="-162" y2="349"/>
+        <line x1="512" y1="512" x2="-56" y2="115"/><line x1="512" y1="512" x2="100" y2="-72"/>
+        <line x1="512" y1="512" x2="293" y2="-184"/>
+      </g>
+      <rect width="1024" height="1024" rx="180" filter="url(#grainw1)" opacity="0.5"/>
+      <rect x="72" y="72" width="880" height="880" rx="140" fill="none" stroke="url(#goldw1)" stroke-width="3" opacity="0.78"/>
+      <rect x="92" y="92" width="840" height="840" rx="122" fill="none" stroke="url(#goldw1)" stroke-width="1" opacity="0.45"/>
+      <g fill="url(#goldw1)" opacity="0.9">
+        <circle cx="120" cy="120" r="4"/><circle cx="904" cy="120" r="4"/>
+        <circle cx="120" cy="904" r="4"/><circle cx="904" cy="904" r="4"/>
+        <rect x="488" y="168" width="5" height="44"/><rect x="510" y="168" width="6" height="44"/><rect x="533" y="168" width="5" height="44"/>
+      </g>
+      <g stroke="url(#goldw1)" stroke-width="1.2" opacity="0.7">
+        <line x1="420" y1="190" x2="478" y2="190"/><line x1="546" y1="190" x2="604" y2="190"/>
+      </g>
+      <g stroke="url(#goldw1)" stroke-width="2.5" fill="none" opacity="0.55">
+        <line x1="312" y1="240" x2="512" y2="400"/><line x1="712" y1="240" x2="512" y2="400"/>
+      </g>
+      <g clip-path="url(#clipLTw1)">
+        <rect x="242" y="240" width="140" height="480" fill="url(#goldw1)"/>
+        <rect x="242" y="240" width="140" height="480" fill="url(#winPatw1)"/>
+        <rect x="248" y="290" width="22" height="32" fill="url(#litw1)"/>
+        <rect x="316" y="378" width="22" height="32" fill="url(#litw1)"/>
+        <rect x="350" y="466" width="22" height="32" fill="url(#litw1)"/>
+        <rect x="282" y="554" width="22" height="32" fill="url(#litw1)"/>
+        <rect x="350" y="642" width="22" height="32" fill="url(#litw1)"/>
+      </g>
+      <g fill="url(#goldw1)"><rect x="252" y="222" width="120" height="18"/><rect x="266" y="208" width="92" height="14"/></g>
+      <g clip-path="url(#clipRTw1)">
+        <rect x="642" y="240" width="140" height="480" fill="url(#goldw1)"/>
+        <rect x="642" y="240" width="140" height="480" fill="url(#winPatw1)"/>
+        <rect x="682" y="290" width="22" height="32" fill="url(#litw1)"/>
+        <rect x="750" y="378" width="22" height="32" fill="url(#litw1)"/>
+        <rect x="716" y="466" width="22" height="32" fill="url(#litw1)"/>
+        <rect x="750" y="554" width="22" height="32" fill="url(#litw1)"/>
+        <rect x="682" y="642" width="22" height="32" fill="url(#litw1)"/>
+      </g>
+      <g fill="url(#goldw1)"><rect x="652" y="222" width="120" height="18"/><rect x="666" y="208" width="92" height="14"/></g>
+      <g clip-path="url(#clipMTw1)">
+        <rect x="462" y="400" width="100" height="320" fill="url(#goldw1)"/>
+        <rect x="462" y="400" width="100" height="320" fill="url(#winPatw1)"/>
+        <rect x="478" y="438" width="22" height="32" fill="url(#litw1)"/>
+        <rect x="512" y="482" width="22" height="32" fill="url(#litw1)"/>
+        <rect x="478" y="570" width="22" height="32" fill="url(#litw1)"/>
+      </g>
+      <g fill="url(#goldw1)">
+        <rect x="468" y="384" width="88" height="16"/><rect x="478" y="368" width="68" height="16"/>
+        <rect x="494" y="340" width="36" height="28"/><rect x="506" y="320" width="12" height="20"/>
+        <rect x="510" y="306" width="4" height="14"/>
+      </g>
+      <rect x="200" y="720" width="624" height="6" fill="url(#goldw1)"/>
+      <line x1="180" y1="734" x2="844" y2="734" stroke="url(#goldw1)" stroke-width="1.5" opacity="0.7"/>
+      <text x="512" y="808" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-style="italic" font-weight="500" font-size="56" letter-spacing="1" fill="url(#goldw1)">MarosAirbnb</text>
+      <text x="512" y="876" text-anchor="middle" font-family="Georgia, serif" font-size="20" letter-spacing="8" fill="url(#goldw1)" opacity="0.75">III · PROPIEDADES · BOUTIQUE</text>
+    </svg></div><div><h2 class="brand-name">MarosAirbnb</h2><div class="sub">${STATE.user.name} · ${STATE.user.role}</div></div></div><button class="btn ghost" id="logoutM">${tr('logout')}</button></div><div class="building-row">${buildingButtons()}</div></div><div class="panel glass">${content()}</div><div class="bottom glass">${mobileNav()}</div></div><div class="desktop"><div class="desktop-grid"><aside class="side glass"><div class="brand-head"><div class="mini-logo mini-logo-svg"><svg viewBox="0 0 1024 1024" style="width: 280px; height: 280px;" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="bgw1" cx="50%" cy="50%" r="72%"><stop offset="0%" stop-color="#1c2547"/><stop offset="100%" stop-color="#080f24"/></radialGradient>
+        <linearGradient id="goldw1" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#f5deaa"/><stop offset="50%" stop-color="#d4b370"/><stop offset="100%" stop-color="#9b7c3f"/></linearGradient>
+        <linearGradient id="litw1" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#ffeed0"/><stop offset="100%" stop-color="#f5deaa"/></linearGradient>
+        <pattern id="winPatw1" patternUnits="userSpaceOnUse" width="34" height="44"><rect x="6" y="6" width="22" height="32" fill="#0a1428" opacity="0.92"/></pattern>
+        <filter id="grainw1"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="3"/><feColorMatrix values="0 0 0 0 0.95 0 0 0 0 0.82 0 0 0 0 0.5 0 0 0 0.13 0"/></filter>
+        <clipPath id="clipAllw1"><rect width="1024" height="1024" rx="180"/></clipPath>
+        <clipPath id="clipLTw1"><rect x="242" y="240" width="140" height="480"/></clipPath>
+        <clipPath id="clipMTw1"><rect x="462" y="400" width="100" height="320"/></clipPath>
+        <clipPath id="clipRTw1"><rect x="642" y="240" width="140" height="480"/></clipPath>
+      </defs>
+      <rect width="1024" height="1024" rx="180" fill="url(#bgw1)"/>
+      <g stroke="url(#goldw1)" stroke-width="1.5" opacity="0.22" clip-path="url(#clipAllw1)">
+        <line x1="512" y1="512" x2="512" y2="-200"/><line x1="512" y1="512" x2="731" y2="-184"/>
+        <line x1="512" y1="512" x2="924" y2="-72"/><line x1="512" y1="512" x2="1080" y2="115"/>
+        <line x1="512" y1="512" x2="1186" y2="349"/><line x1="512" y1="512" x2="1216" y2="600"/>
+        <line x1="512" y1="512" x2="1166" y2="841"/><line x1="512" y1="512" x2="1042" y2="1052"/>
+        <line x1="512" y1="512" x2="858" y2="1198"/><line x1="512" y1="512" x2="634" y2="1268"/>
+        <line x1="512" y1="512" x2="390" y2="1268"/><line x1="512" y1="512" x2="166" y2="1198"/>
+        <line x1="512" y1="512" x2="-18" y2="1052"/><line x1="512" y1="512" x2="-142" y2="841"/>
+        <line x1="512" y1="512" x2="-192" y2="600"/><line x1="512" y1="512" x2="-162" y2="349"/>
+        <line x1="512" y1="512" x2="-56" y2="115"/><line x1="512" y1="512" x2="100" y2="-72"/>
+        <line x1="512" y1="512" x2="293" y2="-184"/>
+      </g>
+      <rect width="1024" height="1024" rx="180" filter="url(#grainw1)" opacity="0.5"/>
+      <rect x="72" y="72" width="880" height="880" rx="140" fill="none" stroke="url(#goldw1)" stroke-width="3" opacity="0.78"/>
+      <rect x="92" y="92" width="840" height="840" rx="122" fill="none" stroke="url(#goldw1)" stroke-width="1" opacity="0.45"/>
+      <g fill="url(#goldw1)" opacity="0.9">
+        <circle cx="120" cy="120" r="4"/><circle cx="904" cy="120" r="4"/>
+        <circle cx="120" cy="904" r="4"/><circle cx="904" cy="904" r="4"/>
+        <rect x="488" y="168" width="5" height="44"/><rect x="510" y="168" width="6" height="44"/><rect x="533" y="168" width="5" height="44"/>
+      </g>
+      <g stroke="url(#goldw1)" stroke-width="1.2" opacity="0.7">
+        <line x1="420" y1="190" x2="478" y2="190"/><line x1="546" y1="190" x2="604" y2="190"/>
+      </g>
+      <g stroke="url(#goldw1)" stroke-width="2.5" fill="none" opacity="0.55">
+        <line x1="312" y1="240" x2="512" y2="400"/><line x1="712" y1="240" x2="512" y2="400"/>
+      </g>
+      <g clip-path="url(#clipLTw1)">
+        <rect x="242" y="240" width="140" height="480" fill="url(#goldw1)"/>
+        <rect x="242" y="240" width="140" height="480" fill="url(#winPatw1)"/>
+        <rect x="248" y="290" width="22" height="32" fill="url(#litw1)"/>
+        <rect x="316" y="378" width="22" height="32" fill="url(#litw1)"/>
+        <rect x="350" y="466" width="22" height="32" fill="url(#litw1)"/>
+        <rect x="282" y="554" width="22" height="32" fill="url(#litw1)"/>
+        <rect x="350" y="642" width="22" height="32" fill="url(#litw1)"/>
+      </g>
+      <g fill="url(#goldw1)"><rect x="252" y="222" width="120" height="18"/><rect x="266" y="208" width="92" height="14"/></g>
+      <g clip-path="url(#clipRTw1)">
+        <rect x="642" y="240" width="140" height="480" fill="url(#goldw1)"/>
+        <rect x="642" y="240" width="140" height="480" fill="url(#winPatw1)"/>
+        <rect x="682" y="290" width="22" height="32" fill="url(#litw1)"/>
+        <rect x="750" y="378" width="22" height="32" fill="url(#litw1)"/>
+        <rect x="716" y="466" width="22" height="32" fill="url(#litw1)"/>
+        <rect x="750" y="554" width="22" height="32" fill="url(#litw1)"/>
+        <rect x="682" y="642" width="22" height="32" fill="url(#litw1)"/>
+      </g>
+      <g fill="url(#goldw1)"><rect x="652" y="222" width="120" height="18"/><rect x="666" y="208" width="92" height="14"/></g>
+      <g clip-path="url(#clipMTw1)">
+        <rect x="462" y="400" width="100" height="320" fill="url(#goldw1)"/>
+        <rect x="462" y="400" width="100" height="320" fill="url(#winPatw1)"/>
+        <rect x="478" y="438" width="22" height="32" fill="url(#litw1)"/>
+        <rect x="512" y="482" width="22" height="32" fill="url(#litw1)"/>
+        <rect x="478" y="570" width="22" height="32" fill="url(#litw1)"/>
+      </g>
+      <g fill="url(#goldw1)">
+        <rect x="468" y="384" width="88" height="16"/><rect x="478" y="368" width="68" height="16"/>
+        <rect x="494" y="340" width="36" height="28"/><rect x="506" y="320" width="12" height="20"/>
+        <rect x="510" y="306" width="4" height="14"/>
+      </g>
+      <rect x="200" y="720" width="624" height="6" fill="url(#goldw1)"/>
+      <line x1="180" y1="734" x2="844" y2="734" stroke="url(#goldw1)" stroke-width="1.5" opacity="0.7"/>
+      <text x="512" y="808" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-style="italic" font-weight="500" font-size="56" letter-spacing="1" fill="url(#goldw1)">MarosAirbnb</text>
+      <text x="512" y="876" text-anchor="middle" font-family="Georgia, serif" font-size="20" letter-spacing="8" fill="url(#goldw1)" opacity="0.75">III · PROPIEDADES · BOUTIQUE</text>
+    </svg></div><div><h2 class="brand-name">MarosAirbnb</h2><div class="sub">${STATE.user.name} · ${STATE.user.role}</div></div></div><div class="building-row">${buildingButtons()}</div><div class="nav-list">${desktopNav()}</div><button class="btn ghost" style="width:100%;margin-top:14px" id="logoutD">${tr('logout')}</button></aside><main class="main glass"><h3>${title()}</h3><div class="sub" style="margin-bottom:16px">${STATE.user.lang==='en'?'Main operating view.':'Vista principal de operación.'}${STATE.lastFeedAt ? ' · Feed '+STATE.lastFeedAt.toLocaleTimeString() : ''}${STATE.feedError ? ' · Feed error: '+STATE.feedError : ''}</div>${content()}</main></div></div></div>`;
+      bind();
+    }
+
+    function bind(){
+      const logout=()=>{STATE.user=null;STATE.tab='general';STATE.ai=null;STATE.selected=null;STATE.calendarView='list';renderLogin()};
+      q('#logoutM')&&(q('#logoutM').onclick=logout);
+      q('#logoutD')&&(q('#logoutD').onclick=logout);
+      qa('[data-b]').forEach(b=>b.onclick=()=>{const k=b.dataset.b; if(STATE.activeBuildings.includes(k)) STATE.activeBuildings=STATE.activeBuildings.filter(x=>x!==k); else STATE.activeBuildings.push(k); if(!STATE.activeBuildings.length) STATE.activeBuildings=[...STATE.user.buildings]; renderApp();});
+      qa('[data-tab]').forEach(b=>b.onclick=()=>{STATE.tab=b.dataset.tab; STATE.ai=null; renderApp();});
+      qa('[data-ai]').forEach(b=>b.onclick=()=>{STATE.ai=STATE.ai===b.dataset.ai?null:b.dataset.ai; renderApp();});
+      qa('[data-cal]').forEach(b=>b.onclick=()=>{STATE.calendarView=b.dataset.cal; STATE.selected=null; renderApp();});
+      qa('[data-m]').forEach(b=>b.onclick=()=>{STATE.month=new Date(STATE.month.getFullYear(),STATE.month.getMonth()+Number(b.dataset.m),1); STATE.selected=null; renderApp();});
+      qa('[data-sm]').forEach(b=>b.onclick=()=>{STATE.month=new Date(STATE.month.getFullYear(),Number(b.dataset.sm),1); STATE.selected=null; renderApp();});
+      qa('[data-r]').forEach(b=>b.onclick=()=>{STATE.selected=b.dataset.r; renderApp();});
+      qa('[data-copy]').forEach(b=>b.onclick=async()=>{const text=decodeURIComponent(b.dataset.copy); try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(text)}else{const t=document.createElement('textarea');t.value=text;document.body.appendChild(t);t.select();document.execCommand('copy');t.remove()} const original=b.textContent; b.textContent=(b.textContent==='Copy'||b.textContent==='Copied')?'Copied':'Copiado'; b.classList.add('done'); setTimeout(()=>{b.textContent=original; b.classList.remove('done')},1400)}catch(e){b.textContent='Error'; setTimeout(()=>b.textContent=(buildingLang('easton')==='en'?'Copy':'Copiar'),1200)}});
+    }
+
+    loadFeeds().finally(()=>renderLogin());
+  })();
+  </script>
+</body>
+</html>
